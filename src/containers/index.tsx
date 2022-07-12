@@ -1,6 +1,6 @@
 import React from 'react';
 import { fetchFolders } from '../services';
-import { EStatus, IFolder } from '../types';
+import { EStatus, IData } from '../types';
 
 const initialState: IState = {
   status: EStatus.IDLE,
@@ -16,13 +16,13 @@ interface FileExplorerContainerProps {
 
 interface IState {
   status: EStatus;
-  data: IFolder | null;
+  data: IData | null;
   error: Error | null;
 }
 
 type TAction =
   | { type: EStatus.PENDING }
-  | { type: EStatus.RESOLVED; data: IFolder }
+  | { type: EStatus.RESOLVED; data: IData }
   | { type: EStatus.REJECTED; error: Error };
 
 function asyncReducer(_state: IState, action: TAction) {

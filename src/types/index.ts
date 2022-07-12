@@ -7,8 +7,12 @@ export interface IFile {
   dev: number;
 }
 
-export interface IFolder {
-  files: IFile[];
+export type TFolder = IFile[];
+
+export interface IData {
+  files: {
+    [key: string]: TFolder;
+  };
 }
 
 export enum EStatus {

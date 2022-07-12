@@ -1,5 +1,5 @@
 import { api } from '../utils/api';
-import { IFolder } from '../types';
+import { IData } from '../types';
 
-export const fetchFolders = async (): Promise<IFolder> =>
+export const fetchFolders = async (): Promise<IData> =>
   (await api.get('/test_json_files')).data;
