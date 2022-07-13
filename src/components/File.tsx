@@ -32,9 +32,13 @@ const File: React.FC<FileProps> = ({ file }) => {
         <StyledTextWrapper>
           <span>Type:</span> <span>{file.name}</span>
         </StyledTextWrapper>
-        <StyledTextWrapper>Size: {file.size}</StyledTextWrapper>
         <StyledTextWrapper>
-          Date: {new Date(file.atime).toISOString()}
+          <span>Size: </span>
+          <span>{file.size}</span>
+        </StyledTextWrapper>
+        <StyledTextWrapper>
+          <span>Date:</span>
+          <span>{new Date(file.atime).toUTCString()}</span>
         </StyledTextWrapper>
       </StyledInfo>
     </StyledFile>
@@ -64,6 +68,7 @@ const StyledInfo = styled.div<{ show: boolean }>`
   top: 30;
   left: 0;
   z-index: 10;
+  min-width: 150px;
   padding: 5px;
   border: 1px solid grey;
 `;

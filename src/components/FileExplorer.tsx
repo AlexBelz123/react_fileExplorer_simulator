@@ -48,6 +48,15 @@ const FileExplorer = () => {
     setActiveFolder(null);
   };
 
+  // sort by all 3 conditions when entering specific folder
+  React.useEffect(() => {
+    if (data && activeFolder) {
+      sortByKey('name', orders.name);
+      sortByKey('size', orders.size);
+      sortByKey('atime', orders.atime);
+    }
+  }, [data]);
+
   return (
     <StyledFileContainer>
       <Panel

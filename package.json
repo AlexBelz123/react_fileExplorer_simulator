@@ -11,6 +11,7 @@
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "axios": "^0.27.2",
+    "concurrently": "^7.2.2",
     "json-server": "^0.17.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -21,7 +22,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "front": "react-scripts start",
+    "server": "json-server server.json --port 5000",
+    "start": "concurrently \"yarn front\" \"yarn server\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
