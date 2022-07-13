@@ -8,6 +8,7 @@ const initialState: IState = {
   error: null,
 };
 
+// I chose to use context insted of passing props
 export const FileExplorerContext = React.createContext(initialState);
 
 interface FileExplorerContainerProps {

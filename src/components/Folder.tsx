@@ -7,6 +7,8 @@ interface FolderProps {
   openFolder: (n: string) => void;
 }
 
+// Folder and file are similar, but I didnt see folder info in json, only files
+// so I made two seperate components for Folder and File
 const Folder: React.FC<FolderProps> = ({ folderName, openFolder }) => {
   return (
     <StyledFolder onDoubleClick={() => openFolder(folderName)}>

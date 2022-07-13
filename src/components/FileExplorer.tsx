@@ -18,9 +18,9 @@ const initialOrderState: IOrders = {
 };
 
 const FileExplorer = () => {
-  const { data, status, error } = React.useContext(FileExplorerContext);
-  const [activeFolder, setActiveFolder] = React.useState<TFolder | null>(null);
-  const [orders, setOrders] = useCookie<IOrders>('orders', initialOrderState);
+  const { data, status, error } = React.useContext(FileExplorerContext); // make a request and get data
+  const [activeFolder, setActiveFolder] = React.useState<TFolder | null>(null); // when entering a folder
+  const [orders, setOrders] = useCookie<IOrders>('orders', initialOrderState); // get sorting data from cookies
 
   const sortByKey = (key: keyof IFile, order: TOrder) => {
     setOrders((prevOrders: IOrders) => ({ ...prevOrders, [key]: order }));
