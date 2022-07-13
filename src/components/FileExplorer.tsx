@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FileExplorerContext } from '../containers';
-import useCookie from '../hooks/useCookie';
+import { useCookie } from '../hooks/useCookie';
 import { EStatus, TOrder, IOrders, TFolder, IFile, IData } from '../types';
 import {
   sortByNumberComparator,
@@ -11,16 +11,17 @@ import Panel from './Panel';
 import Folder from './Folder';
 import File from './File';
 
-const initialOrderState = (): IOrders => ({
+const initialOrderState: IOrders = {
   name: 'asc',
   atime: 'asc',
   size: 'asc',
-});
+};
 
 const FileExplorer = () => {
   const { data, status, error } = React.useContext(FileExplorerContext);
   const [activeFolder, setActiveFolder] = React.useState<TFolder | null>(null);
   const [orders, setOrders] = useCookie<IOrders>('orders', initialOrderState);
+
   const sortByKey = (key: keyof IFile, order: TOrder) => {
     setOrders((prevOrders: IOrders) => ({ ...prevOrders, [key]: order }));
 
@@ -46,15 +47,6 @@ const FileExplorer = () => {
   const goBack = () => {
     setActiveFolder(null);
   };
-
-  // sort only once when got cookie
-  React.useEffect(() => {
-    if (data && activeFolder) {
-      sortByKey('name', orders.name);
-      sortByKey('size', orders.size);
-      sortByKey('atime', orders.atime);
-    }
-  }, [data]);
 
   return (
     <StyledFileContainer>

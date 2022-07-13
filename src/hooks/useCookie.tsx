@@ -2,12 +2,12 @@ import React from 'react';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
-export default function useCookie<G>(
+export function useCookie<G>(
   key: string,
-  defaultValue: string | G | any = '', // fix
+  defaultValue: G | string = '',
   { serialize = JSON.stringify, deserialize = JSON.parse } = {}
-): any {
-  const initialState = () => {
+) {
+  const initialState = (): G => {
     const lsItem = cookies.get(key);
     if (lsItem) return lsItem;
     return typeof defaultValue === 'function' ? defaultValue() : defaultValue;
