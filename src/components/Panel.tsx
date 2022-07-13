@@ -1,13 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
-type TOrder = 'asc' | 'desc'; // fix (DRY)
-interface IOrders {
-  // fix (DRY)
-  name: TOrder;
-  date: TOrder;
-  size: TOrder;
-}
+import { TOrder, IOrders } from '../types';
 
 interface PanelProps {
   goBack: () => void;
@@ -23,7 +16,7 @@ const Panel: React.FC<PanelProps> = ({
   disabled,
 }) => {
   const nameOrder = orders.name === 'asc' ? 'desc' : 'asc';
-  const dateOrder = orders.date === 'asc' ? 'desc' : 'asc';
+  const dateOrder = orders.atime === 'asc' ? 'desc' : 'asc';
   const sizeOrder = orders.size === 'asc' ? 'desc' : 'asc';
 
   return (
@@ -32,8 +25,8 @@ const Panel: React.FC<PanelProps> = ({
       <StyledPanelItem onClick={() => sortByKey('name', nameOrder)}>
         Name {orders.name === 'asc' ? <>&#8593;</> : <>&#8595;</>}
       </StyledPanelItem>
-      <StyledPanelItem onClick={() => sortByKey('date', dateOrder)}>
-        Date {orders.date === 'asc' ? <>&#8593;</> : <>&#8595;</>}
+      <StyledPanelItem onClick={() => sortByKey('atime', dateOrder)}>
+        Date {orders.atime === 'asc' ? <>&#8593;</> : <>&#8595;</>}
       </StyledPanelItem>
       <StyledPanelItem onClick={() => sortByKey('size', sizeOrder)}>
         Size {orders.size === 'asc' ? <>&#8593;</> : <>&#8595;</>}

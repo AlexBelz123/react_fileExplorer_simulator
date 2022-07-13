@@ -25,16 +25,16 @@ type TAction =
   | { type: EStatus.RESOLVED; data: IData }
   | { type: EStatus.REJECTED; error: Error };
 
-function asyncReducer(_state: IState, action: TAction) {
+function asyncReducer(_state: IState, action: TAction): IState {
   switch (action.type) {
     case EStatus.PENDING: {
-      return { status: 'pending', data: null, error: null };
+      return { status: EStatus.PENDING, data: null, error: null };
     }
     case EStatus.RESOLVED: {
-      return { status: 'resolved', data: action.data, error: null };
+      return { status: EStatus.RESOLVED, data: action.data, error: null };
     }
     case EStatus.REJECTED: {
-      return { status: 'rejected', data: null, error: action.error };
+      return { status: EStatus.REJECTED, data: null, error: action.error };
     }
     default: {
       const unhandaledAction: { type: string } = action;
@@ -46,19 +46,15 @@ function asyncReducer(_state: IState, action: TAction) {
 const FileExplorerContainer: React.FC<FileExplorerContainerProps> = ({
   children,
 }) => {
-  // @ts-ignore
   const [state, dispatch] = React.useReducer(asyncReducer, initialState);
 
   React.useEffect(() => {
-    // @ts-ignore
     dispatch({ type: EStatus.PENDING });
     fetchFolders().then(
       (data) => {
-        // @ts-ignore
         dispatch({ type: EStatus.RESOLVED, data });
       },
       (error) => {
-        // @ts-ignore
         dispatch({ type: EStatus.REJECTED, error });
       }
     );

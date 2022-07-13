@@ -21,3 +21,10 @@ export enum EStatus {
   RESOLVED = 'resolved',
   REJECTED = 'rejected',
 }
+
+export type TOrder = 'asc' | 'desc';
+export interface IOrders {
+  name: TOrder;
+  atime: TOrder;
+  size: TOrder;
+}

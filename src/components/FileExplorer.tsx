@@ -1,40 +1,39 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FileExplorerContext } from '../containers';
-import { EStatus } from '../types';
+import useCookie from '../hooks/useCookie';
+import { EStatus, TOrder, IOrders, TFolder } from '../types';
+import {
+  sortByNumberComparator,
+  sortByStringComparator,
+} from '../utils/helpers';
 import Panel from './Panel';
 import Folder from './Folder';
 import File from './File';
 
-const sortByNumberComparator = (first: number, second: number, order: TOrder) =>
-  order === 'asc' ? first - second : second - first;
-
-// ------------------------------------------
-
-type TOrder = 'asc' | 'desc';
-interface IOrders {
-  name: TOrder;
-  date: TOrder;
-  size: TOrder;
-}
+const initialOrderState = (): IOrders => ({
+  name: 'asc',
+  atime: 'asc',
+  size: 'asc',
+});
 
 const FileExplorer = () => {
   const { data, status, error } = React.useContext(FileExplorerContext);
-  const [activeFolder, setActiveFolder] = React.useState(null);
-  const [orders, setOrders] = React.useState<IOrders>({
-    // take from cookie (fix)
-    name: 'asc',
-    date: 'asc',
-    size: 'asc',
-  });
-
-  // sort by string fix
+  const [activeFolder, setActiveFolder] = React.useState<TFolder | null>(null);
+  const [orders, setOrders] = useCookie<IOrders>('orders', initialOrderState);
   const sortByKey = (key: string, order: TOrder) => {
+    // @ts-ignore
     setOrders((prevOrders) => ({ ...prevOrders, [key]: order }));
     // @ts-ignore
     setActiveFolder((prev) => [
       // @ts-ignore
-      ...prev?.sort((a, b) => sortByNumberComparator(a[key], b[key], order)),
+      ...prev?.sort((a, b) => {
+        if (typeof a[key] === 'string') {
+          return sortByStringComparator(a[key], b[key], order);
+        }
+
+        return sortByNumberComparator(a[key], b[key], order);
+      }),
     ]);
   };
 
@@ -47,7 +46,14 @@ const FileExplorer = () => {
     setActiveFolder(null);
   };
 
-  //   make button disabled when mapping folders
+  React.useEffect(() => {
+    if (data && activeFolder) {
+      sortByKey('name', orders.name);
+      sortByKey('size', orders.size);
+      sortByKey('atime', orders.atime);
+    }
+  }, [data]);
+
   return (
     <StyledFileContainer>
       <Panel
