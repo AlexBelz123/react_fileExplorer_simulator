@@ -1,15 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TFolder } from '../types';
 import FolderImage from '../assets/folder.jpg';
 
 interface FolderProps {
-  folder: TFolder;
   folderName: string;
   openFolder: (n: string) => void;
 }
 
-const Folder: React.FC<FolderProps> = ({ folder, folderName, openFolder }) => {
+const Folder: React.FC<FolderProps> = ({ folderName, openFolder }) => {
   return (
     <StyledFolder onDoubleClick={() => openFolder(folderName)}>
       <StyledImg src={FolderImage} alt={folderName} />

@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TOrder, IOrders } from '../types';
+import { TOrder, IOrders, IFile } from '../types';
 
 interface PanelProps {
   goBack: () => void;
   orders: IOrders;
-  sortByKey: (k: string, order: TOrder) => void;
+  sortByKey: (k: keyof IFile, order: TOrder) => void;
   disabled: boolean;
 }
 

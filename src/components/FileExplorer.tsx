@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FileExplorerContext } from '../containers';
 import useCookie from '../hooks/useCookie';
-import { EStatus, TOrder, IOrders, TFolder } from '../types';
+import { EStatus, TOrder, IOrders, TFolder, IFile, IData } from '../types';
 import {
   sortByNumberComparator,
   sortByStringComparator,
@@ -21,31 +21,33 @@ const FileExplorer = () => {
   const { data, status, error } = React.useContext(FileExplorerContext);
   const [activeFolder, setActiveFolder] = React.useState<TFolder | null>(null);
   const [orders, setOrders] = useCookie<IOrders>('orders', initialOrderState);
-  const sortByKey = (key: string, order: TOrder) => {
-    // @ts-ignore
-    setOrders((prevOrders) => ({ ...prevOrders, [key]: order }));
-    // @ts-ignore
-    setActiveFolder((prev) => [
-      // @ts-ignore
-      ...prev?.sort((a, b) => {
-        if (typeof a[key] === 'string') {
-          return sortByStringComparator(a[key], b[key], order);
-        }
+  const sortByKey = (key: keyof IFile, order: TOrder) => {
+    setOrders((prevOrders: IOrders) => ({ ...prevOrders, [key]: order }));
 
-        return sortByNumberComparator(a[key], b[key], order);
-      }),
-    ]);
+    const sortedFiles = (activeFolder as TFolder).sort((a, b) => {
+      let item1 = a[key as keyof IFile];
+      let item2 = b[key as keyof IFile];
+
+      if (typeof item1 === 'string' && typeof item2 === 'string') {
+        return sortByStringComparator(item1, item2, order);
+      }
+      item1 = +item1; // default sort by number
+      item2 = +item2;
+      return sortByNumberComparator(item1, item2, order);
+    });
+
+    setActiveFolder(sortedFiles);
   };
 
   const openFolder = (name: string) => {
-    // @ts-ignore
-    setActiveFolder(data?.files[`${name}`]);
+    setActiveFolder(data?.files[name] as TFolder);
   };
 
   const goBack = () => {
     setActiveFolder(null);
   };
 
+  // sort only once when got cookie
   React.useEffect(() => {
     if (data && activeFolder) {
       sortByKey('name', orders.name);
@@ -68,17 +70,10 @@ const FileExplorer = () => {
       <StyledFolderContainer>
         {status === EStatus.RESOLVED &&
           !activeFolder &&
-          // @ts-ignore
-          Object.entries(data?.files).map(([key, value]) => (
-            <Folder
-              key={key}
-              folder={value}
-              folderName={key}
-              openFolder={openFolder}
-            />
+          Object.keys((data as IData).files).map((key) => (
+            <Folder key={key} folderName={key} openFolder={openFolder} />
           ))}
-        {Boolean(activeFolder) &&
-          // @ts-ignore
+        {activeFolder !== null &&
           activeFolder.map((f) => <File key={f.mtime} file={f} />)}
       </StyledFolderContainer>
     </StyledFileContainer>
